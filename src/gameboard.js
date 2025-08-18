@@ -49,14 +49,14 @@ class Gameboard {
         }
 
         // place the actual ship, no need to check anymore.
-        const ship = new Ship(3);
+        const ship = new Ship(length);
         if (direction === "hori") {
             for (let i = 0; i < length; i++) {
-                this.board[row][col + i] = ship; // each cell here points to ship.
+                this.board[row][col + i].occupied = ship; // each cell here points to ship.
             }
         } else if (direction === "vert") {
             for (let i = 0; i < length; i++) {
-                this.board[row + i][col] = ship;
+                this.board[row + i][col].occupied = ship;
             }
         }
         return true; // just to confirm its placed

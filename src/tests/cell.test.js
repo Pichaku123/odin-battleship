@@ -5,5 +5,5 @@ test("cell creation", () => {
     const temp = new Cell();
     temp.hit = true;
     expect(temp.hit).toBe(true);
-    expect(temp.occupied).toBe(false);
+    expect(temp.occupied).toBe(null);
 });
