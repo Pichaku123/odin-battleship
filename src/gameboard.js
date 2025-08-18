@@ -7,7 +7,8 @@ class Gameboard {
         for (let i = 0; i < size; i++) {
             const temp = [];
             for (let j = 0; j < size; j++) {
-                temp.push("."); // . means not hit, x means hit.
+                const currCell = new Cell();
+                temp.push(currCell);
             }
             board.push(temp);
         }
@@ -22,7 +23,7 @@ class Gameboard {
             row < this.size &&
             col >= 0 &&
             col < this.size &&
-            this.board[row][col] === "."
+            !this.board[row][col].occupied
         ) {
             // 0 indexed
             return true;
@@ -62,7 +63,7 @@ class Gameboard {
     }
 
     receiveAttack(x, y) {
-        // we need some sort of marker to tell whether its been hit or not, cuz before this we only checked if its occupied or not.
+        //ill just update the cell's properties to mark as occupied, not sure what to do about ship tho, idk how to track ship.
     }
 }
 
