@@ -1,6 +1,6 @@
 /* eslint-disable */
 const Ship = require("./ship");
-
+const Cell = require("./cell");
 class Gameboard {
     constructor(size) {
         const board = [];
