@@ -13,7 +13,12 @@ test("place random boat", () => {
     expect(gb.board[0][0].occupied).toBe(null);
     expect(gb.board[2][1].occupied).not.toBe(null);
     expect(gb.board[2][2].occupied).not.toBe(null);
-    console.log(gb.board[2][2].occupied);
     expect(gb.board[2][3].occupied.length).toBe(3);
 });
+
+test("attack a ship", () => {
+    const gb = new Gameboard(5);
+    gb.placeShip(0, 0, "hori", 2);
+    expect(gb.receiveAttack(0, 2)).toBe("miss");
+})
     
