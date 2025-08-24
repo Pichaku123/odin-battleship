@@ -6,6 +6,7 @@ class GameController{
         this.p1 = p1;
         this.p2 = p2;
         this.currPlayer = p1;     //by default, we'll swap this later.
+        this.winner = null;
     }
     
     start(){
@@ -26,22 +27,22 @@ class GameController{
         //again, we track the currentPlayer throughout.
         const oppPlayer = (this.currPlayer === this.p1) ? (this.p2) : (this.p1);
         //now take coords and attack oppPlayer's board.
-        let tempR = 2, tempC = 3;
-        const status = oppPlayer.gameboard.receiveAttack(tempR, tempC);
+        const status = oppPlayer.gameboard.receiveAttack(2, 3);
         console.log(status);
 
         //well status part works ig, use that to do smth in ui, ofc that's tbd later.
         //call smth from ui here
 
-        //swap current player only if they've played valid move
-        this.currPlayer = this.currPlayer === this.p1 ? this.p2 : this.p1;
-
         //check win condition
         if(oppPlayer.gameboard.allShipsSunk()){
-            //we win
+            //we win, update winner
+            this.winner = this.currPlayer;
         }
         else{
             //continue, return the info about this turn for ui.
+            //swap current player only if they've played valid move
+            this.currPlayer = this.currPlayer === this.p1 ? this.p2 : this.p1;
+            
         }
     }
 

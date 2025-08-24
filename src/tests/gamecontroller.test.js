@@ -1,5 +1,5 @@
-const GameController = require("./gamecontroller");
-const Player = require("./player");
+const GameController = require("../gamecontroller");
+const Player = require("../player");
 
 test("putting random ships", () => {
     const human = new Player("human");
