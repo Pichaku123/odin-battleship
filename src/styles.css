@@ -25,4 +25,17 @@ body {
     height: 20px;
 }
 
+.hit{
+    background-color: red;
+}
+
+.miss{
+    background-color: aquamarine;
+}
+
+.not-yet{
+    background-color: greenyellow;
+}
+
+
 
