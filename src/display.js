@@ -26,31 +26,51 @@ const UI = (gameController) => {
                 row.appendChild(cell);
                 markCondition(currBoard.board[i][j], cell);
                 console.log(cell.classList.entries);
+
+                //add event listener during cell creation in dom itself, tbd later
+                cell.addEventListener("click", () => {
+                    //use the turn's result to get turn details like coords, status and stuff
+                    if(!gameController.winner){
+                        const turnResult = gameController.turn(i, j);
+                        if(turnResult.status === "alr_atk"){
+                            console.log("Invalid, retry");
+                            return;
+                        }
+
+                        markCondition(currBoard.board[i][j], cell);     //dom updated here
+                        if(turnResult.gameOver){
+                            if(turnResult.winner === gameController.p1){
+                                alert(`Player 1 wins!`);
+                            }
+                            else{
+                                alert(`Player 2 wins!`);
+                            }
+                        }
+                    }
+                });
+                
             }
 
             boardDisplay.appendChild(row);
         }
-
     };
 
     const markCondition = (currCell, cellDOM) => {
-        if(currCell.occupied && currCell.hit){
-            cellDOM.classList.add("hit");
+        //remove the other classes first, cuz that was causing issues with updating css
+        cellDOM.classList.remove("hit", "miss", "not-yet", "nothing");
+        if (currCell.occupied && currCell.hit) {
+            cellDOM.classList.toggle("hit");
+        } else if (currCell.occupied && !currCell.hit) {
+            cellDOM.classList.toggle("not-yet");
+        } else if (!currCell.occupied && currCell.hit) {
+            cellDOM.classList.toggle("miss");
+        } else {
+            cellDOM.classList.toggle("nothing");
         }
-        else if (currCell.occupied && !currCell.hit) {
-            cellDOM.classList.add("not-yet");
-        }
-        else if (!currCell.occupied && currCell.hit) {
-            cellDOM.classList.add("miss");
-        }
-        else{
-            cellDOM.classList.add("nothing");
-        }
-    }
+    };
 
     renderBoard(board1);
     renderBoard(board2);
-    
 };
 
 module.exports = UI;
