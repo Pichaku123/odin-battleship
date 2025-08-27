@@ -5,17 +5,17 @@ const UI = (gameController) => {
     const board1 = gameController.p1.gameboard;
     const board2 = gameController.p2.gameboard;
     const boardContainer = document.querySelector("#board-container");
+    const statusMsg = document.querySelector("#status-msg");
     console.log(boardContainer);
 
     const renderBoard = (currBoard) => {
         // now we've passed the gamecontroller with all the methods and stuff into UI.
         // this includes the actual boards, so we can access those too.
-
         const boardNo = currBoard === board1 ? 1 : 2;
         const boardDisplay = document.createElement("div");
         boardDisplay.classList.add(`board-${boardNo}`);
         boardContainer.appendChild(boardDisplay);
-
+        
         for (let i = 0; i < currBoard.size; i++) {
             const row = document.createElement("div");
             row.classList.add("board-row");
@@ -31,19 +31,30 @@ const UI = (gameController) => {
                 cell.addEventListener("click", () => {
                     //use the turn's result to get turn details like coords, status and stuff
                     if(!gameController.winner){
+                        //adding checks to ensure we only click on enemy's board, not our own
+                        statusMsg.innerHTML = "";
+                        const oppBoard = gameController.currPlayer === gameController.p1 ? board2 : board1; 
+                        if(currBoard !== oppBoard){
+                            statusMsg.innerHTML = "Can't attack your own board";
+                            console.log(statusMsg.innerHTML);
+                            return;
+                        }
                         const turnResult = gameController.turn(i, j);
                         if(turnResult.status === "alr_atk"){
-                            console.log("Invalid, retry");
+                            statusMsg.innerHTML = "Invalid, retry";
+                            console.log(statusMsg.innerHTML);
                             return;
                         }
 
                         markCondition(currBoard.board[i][j], cell);     //dom updated here
                         if(turnResult.gameOver){
                             if(turnResult.winner === gameController.p1){
-                                alert(`Player 1 wins!`);
+                                statusMsg.innerHTML = "Player 1 wins!";
+                                console.log(statusMsg.innerHTML);
                             }
                             else{
-                                alert(`Player 2 wins!`);
+                                statusMsg.innerHTML = "Player 2 wins!";
+                                console.log(statusMsg.innerHTML);
                             }
                         }
                     }

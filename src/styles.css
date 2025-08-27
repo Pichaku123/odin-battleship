@@ -14,15 +14,15 @@ body {
 
 .board-row{
     border: 2px solid black;
-    height: 20px;
-    width: 200px;
+    height: 30px;
+    width: 300px;
     display: flex;
 }
 
 .board-cell{
     border: 2px solid black;
-    width: 20px;
-    height: 20px;
+    width: 30px;
+    height: 30px;
 }
 
 .hit{
@@ -37,5 +37,9 @@ body {
     background-color: greenyellow;
 }
 
-
+#status-msg{
+    border: 2px solid black;
+    height: 2em;
+    font-size: 2em;
+}
 
