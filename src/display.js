@@ -21,7 +21,7 @@ const UI = (gameController) => {
         const boardDisplay = document.createElement("div");
         boardDisplay.classList.add(`board-${boardNo}`);
         boardContainer.appendChild(boardDisplay);
-        
+
         for (let i = 0; i < currBoard.size; i++) {
             const row = document.createElement("div");
             row.classList.add("board-row");
@@ -34,8 +34,7 @@ const UI = (gameController) => {
 
                 const oppBoard = gameController.currPlayer === gameController.p1 ? board2 : board1;
                 //add event listener during cell creation in dom itself, tbd later
-                    cell.addEventListener("click", () => clickHandler(currBoard, i, j, cell));
-                
+                cell.addEventListener("click", () => clickHandler(currBoard, i, j, cell));
             }
 
             boardDisplay.appendChild(row);
@@ -72,12 +71,9 @@ const UI = (gameController) => {
                         console.log(statusMsg.innerHTML);
                     }
                 }
-            });//callback to update the board after every turn
-
-            
-            
+            }); //callback to update the board after every turn
         }
-    }
+    };
 
     const markCondition = (currCell, cellDOM) => {
         //remove the other classes first, cuz that was causing issues with updating css

@@ -5,41 +5,40 @@ body {
     box-sizing: border-box;
 }
 
-#board-container{
+#board-container {
     border: 2px solid black;
     margin: 100px;
     display: flex;
     justify-content: space-between;
 }
 
-.board-row{
+.board-row {
     border: 2px solid black;
     height: 30px;
     width: 300px;
     display: flex;
 }
 
-.board-cell{
+.board-cell {
     border: 2px solid black;
     width: 30px;
     height: 30px;
 }
 
-.hit{
+.hit {
     background-color: red;
 }
 
-.miss{
+.miss {
     background-color: aquamarine;
 }
 
-.not-yet{
+.not-yet {
     background-color: greenyellow;
 }
 
-#status-msg{
+#status-msg {
     border: 2px solid black;
     height: 2em;
     font-size: 2em;
 }
-

@@ -20,5 +20,4 @@ test("attack a ship", () => {
     const gb = new Gameboard(5);
     gb.placeShip(0, 0, "hori", 2);
     expect(gb.receiveAttack(0, 2)).toBe("miss");
-})
-    
+});

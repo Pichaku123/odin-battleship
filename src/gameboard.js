@@ -64,30 +64,29 @@ class Gameboard {
 
     receiveAttack(row, col) {
         const currCell = this.board[row][col];
-        if(currCell.hit){x
-            return "alr_atk";   // here its already hit
+        if (currCell.hit) {
+            x;
+            return "alr_atk"; // here its already hit
         }
         currCell.hit = true;
         //now after hitting this cell, check if it sunk any ships or not.
         //rules for miss/hit in cell.js, rn we need to check whether it hit a ship or not.
-        if(currCell.occupied){
+        if (currCell.occupied) {
             //hit an actual ship
             let currShip = currCell.occupied;
             currShip.gotHit();
-            if(currShip.isSunk()){
+            if (currShip.isSunk()) {
                 return "sunk";
-            }
-            else{
+            } else {
                 return "hit";
             }
-        }
-        else{
+        } else {
             //no ship here, shot missed
             return "miss";
         }
     }
 
-    printBoard(){
+    printBoard() {
         for (let i = 0; i < this.size; i++) {
             let rowOP = "";
             for (let j = 0; j < this.size; j++) {
@@ -101,20 +100,19 @@ class Gameboard {
         }
     }
 
-    allShipsSunk(){
-        for(let i=0; i<this.size; i++){
-            for(let j=0; j<this.size; j++){
+    allShipsSunk() {
+        for (let i = 0; i < this.size; i++) {
+            for (let j = 0; j < this.size; j++) {
                 //check each cell if it has ship or not.
                 //if it has ship, check if that ship is sunk or not.
                 //if it has ship that's not sunk, return false.
                 const currShip = this.board[i][j].occupied;
-                if(currShip && !currShip.isSunk()){
+                if (currShip && !currShip.isSunk()) {
                     return false;
                 }
             }
         }
         return true;
     }
-
 }
 module.exports = Gameboard;

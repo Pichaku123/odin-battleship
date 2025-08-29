@@ -10,10 +10,9 @@ test("putting random ships", () => {
     newGame.turn();
     const cell = comp.gameboard.board[2][3];
     expect(cell.hit).toBe(true);
-    if(cell.occupied){
+    if (cell.occupied) {
         expect(cell.occupied.hits).toBe();
-    }
-    else{
+    } else {
         expect(cell.occupied).toBeNull();
     }
 });

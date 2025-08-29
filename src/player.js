@@ -14,7 +14,8 @@ class Player {
         while (true) {
             r = Math.floor(Math.random() * oppBoard.size);
             c = Math.floor(Math.random() * oppBoard.size);
-            if(!oppBoard.board[r][c].hit){   // valid move found
+            if (!oppBoard.board[r][c].hit) {
+                // valid move found
                 break;
             }
         }
