@@ -8,6 +8,12 @@ const UI = (gameController) => {
     const statusMsg = document.querySelector("#status-msg");
     console.log(boardContainer);
 
+    const renderBothBoards = () => {
+        boardContainer.innerHTML = ""; // to clear previous boards
+        renderBoard(board1);
+        renderBoard(board2);
+    };
+
     const renderBoard = (currBoard) => {
         // now we've passed the gamecontroller with all the methods and stuff into UI.
         // this includes the actual boards, so we can access those too.
@@ -25,46 +31,53 @@ const UI = (gameController) => {
                 cell.classList.add("board-cell");
                 row.appendChild(cell);
                 markCondition(currBoard.board[i][j], cell);
-                console.log(cell.classList.entries);
 
+                const oppBoard = gameController.currPlayer === gameController.p1 ? board2 : board1;
                 //add event listener during cell creation in dom itself, tbd later
-                cell.addEventListener("click", () => {
-                    //use the turn's result to get turn details like coords, status and stuff
-                    if(!gameController.winner){
-                        //adding checks to ensure we only click on enemy's board, not our own
-                        statusMsg.innerHTML = "";
-                        const oppBoard = gameController.currPlayer === gameController.p1 ? board2 : board1; 
-                        if(currBoard !== oppBoard){
-                            statusMsg.innerHTML = "Can't attack your own board";
-                            console.log(statusMsg.innerHTML);
-                            return;
-                        }
-                        const turnResult = gameController.turn(i, j);
-                        if(turnResult.status === "alr_atk"){
-                            statusMsg.innerHTML = "Invalid, retry";
-                            console.log(statusMsg.innerHTML);
-                            return;
-                        }
-
-                        markCondition(currBoard.board[i][j], cell);     //dom updated here
-                        if(turnResult.gameOver){
-                            if(turnResult.winner === gameController.p1){
-                                statusMsg.innerHTML = "Player 1 wins!";
-                                console.log(statusMsg.innerHTML);
-                            }
-                            else{
-                                statusMsg.innerHTML = "Player 2 wins!";
-                                console.log(statusMsg.innerHTML);
-                            }
-                        }
-                    }
-                });
+                    cell.addEventListener("click", () => clickHandler(currBoard, i, j, cell));
                 
             }
 
             boardDisplay.appendChild(row);
         }
     };
+
+    const clickHandler = (currBoard, i, j, cell) => {
+        //use the turn's result to get turn details like coords, status and stuff
+        if (!gameController.winner) {
+            //adding checks to ensure we only click on enemy's board, not our own
+            statusMsg.innerHTML = "";
+            const oppBoard = gameController.currPlayer === gameController.p1 ? board2 : board1;
+            if (currBoard !== oppBoard) {
+                statusMsg.innerHTML = "Can't attack your own board";
+                console.log(statusMsg.innerHTML);
+                return;
+            }
+
+            //pass callback to turn() to update ui after every turn
+            gameController.turn(i, j, (turnResult) => {
+                renderBothBoards();
+                if (turnResult.status === "alr_atk") {
+                    statusMsg.innerHTML = "Invalid, retry";
+                    console.log(statusMsg.innerHTML);
+                    return;
+                }
+
+                if (turnResult.gameOver) {
+                    if (turnResult.winner === gameController.p1) {
+                        statusMsg.innerHTML = "Player 1 wins!";
+                        console.log(statusMsg.innerHTML);
+                    } else {
+                        statusMsg.innerHTML = "Player 2 wins!";
+                        console.log(statusMsg.innerHTML);
+                    }
+                }
+            });//callback to update the board after every turn
+
+            
+            
+        }
+    }
 
     const markCondition = (currCell, cellDOM) => {
         //remove the other classes first, cuz that was causing issues with updating css
