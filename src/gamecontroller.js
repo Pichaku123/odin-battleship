@@ -37,24 +37,11 @@ class GameController {
 
         //now take coords and attack oppPlayer's board.
         const status = oppPlayer.gameboard.receiveAttack(row, col);
-
-        //well status part works ig, use that to do smth in ui, ofc that's tbd later.
-
         console.log(
             `Move played by ${this.currPlayer === this.p1 ? "p1" : "p2"} at ${row}, ${col}`
         );
-        if (status === "alr_atk") {
-            return {
-                row,
-                col,
-                status,
-                gameOver: false,
-                winner: null,
-                currentPlayer: this.currPlayer,
-            };
-        }
 
-        const result = {
+        let result = {  //for default case, update fields as needed
             row,
             col,
             status,
@@ -62,6 +49,11 @@ class GameController {
             winner: null,
             currentPlayer: this.currPlayer,
         };
+
+        if (status === "alr_atk") {
+            if(callback) callback(result);
+            return result;
+        }
 
         //check win condition
         if (oppPlayer.gameboard.allShipsSunk()) {
@@ -75,7 +67,7 @@ class GameController {
             //update- play computer's move immediately if its computer's turn next, else move on normally.
 
             if (this.currPlayer.type === "comp") {
-                setTimeout(() => this.turn(null, null, callback), 300); // fake illusion of ai "thinking", recursively play next turn
+                setTimeout(() => this.turn(null, null, callback), 800); // fake illusion of ai "thinking", recursively play next turn
             }
         }
         if (callback) callback(result); //basically the callback is used to update ui

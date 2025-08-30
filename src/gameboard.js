@@ -65,7 +65,6 @@ class Gameboard {
     receiveAttack(row, col) {
         const currCell = this.board[row][col];
         if (currCell.hit) {
-            x;
             return "alr_atk"; // here its already hit
         }
         currCell.hit = true;

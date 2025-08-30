@@ -35,6 +35,7 @@ const UI = (gameController) => {
                 const oppBoard = gameController.currPlayer === gameController.p1 ? board2 : board1;
                 //add event listener during cell creation in dom itself, tbd later
                 cell.addEventListener("click", () => clickHandler(currBoard, i, j, cell));
+                statusMsg.innerHTML = gameController.currPlayer === gameController.p1 ? `Player 1's turn` : `Player 2's turn`;
             }
 
             boardDisplay.appendChild(row);
