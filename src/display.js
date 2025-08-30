@@ -6,7 +6,15 @@ const UI = (gameController) => {
     const board2 = gameController.p2.gameboard;
     const boardContainer = document.querySelector("#board-container");
     const statusMsg = document.querySelector("#status-msg");
-    console.log(boardContainer);
+    
+    //random ship placement
+    document.querySelector("#random-ship").addEventListener("click", () => {
+        const lengths = [2, 3, 3, 4, 5];
+        board1.randomlyPlaceShips(lengths);
+        board2.randomlyPlaceShips(lengths);
+        renderBothBoards();
+        statusMsg.innerHTML = "Randomly placed boards.";
+    });
 
     const renderBothBoards = () => {
         boardContainer.innerHTML = ""; // to clear previous boards

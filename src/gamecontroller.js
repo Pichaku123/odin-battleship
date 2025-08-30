@@ -12,14 +12,7 @@ class GameController {
 
     start() {
         //place ships before moving on.
-        this.p1.gameboard.placeShip(0, 0, "hori", 2); //use input from ui later.
-        this.p2.gameboard.placeShip(1, 1, "hori", 2);
-        this.p2.gameboard.placeShip(2, 4, "vert", 3);
-
-        //render boards here, do it later in display.js
-        // this.p1.gameboard.printBoard();
-        // console.log("\n");
-        // this.p2.gameboard.printBoard();
+        //moving ship placement logic to random button for now, might remove this function later.
     }
 
     turn(row = null, col = null, callback = null) {

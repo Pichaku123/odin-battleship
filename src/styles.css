@@ -33,10 +33,17 @@ body {
     background-color: aquamarine;
 }
 
-
+/* .not-yet {
+    background-color: greenyellow;
+} */
 
 #status-msg {
     border: 2px solid black;
     height: 2em;
     font-size: 2em;
+}
+
+#random-ship{
+    font-size: 1.2em;
+    padding: 0.5em 1em;
 }

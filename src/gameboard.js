@@ -14,6 +14,7 @@ class Gameboard {
         }
         this.board = board;
         this.size = size;
+        this.ships = [];    //ships for each board kept seperately
     }
 
     validPos(row, col) {
@@ -25,10 +26,24 @@ class Gameboard {
             col < this.size &&
             !this.board[row][col].occupied
         ) {
-            // 0 indexed
             return true;
         }
         return false;
+    }
+
+    randomlyPlaceShips(lengths){
+        const dirs = ["hori", "vert"];
+        for(let length of lengths){
+            //run loop to place it till its placed in valid spot
+            while(true){
+                const r = Math.floor(Math.random() * this.size);
+                const c = Math.floor(Math.random() * this.size);
+                const dir = dirs[Math.floor(Math.random() * dirs.length)];
+                if(this.placeShip(r, c, dir, length)){  //if it can't be placed, it returns false, if it can, it places and ret. true
+                    break;  //go to next ship
+                }
+            }
+        }
     }
 
     placeShip(row, col, direction, length) {
@@ -47,7 +62,6 @@ class Gameboard {
                 }
             }
         }
-
         // place the actual ship, no need to check anymore.
         const ship = new Ship(length);
         if (direction === "hori") {
@@ -59,6 +73,7 @@ class Gameboard {
                 this.board[row + i][col].occupied = ship;
             }
         }
+        this.ships.push(ship);  //push to ships array, easier to check if all sunk
         return true; // just to confirm its placed
     }
 
@@ -85,30 +100,10 @@ class Gameboard {
         }
     }
 
-    printBoard() {
-        for (let i = 0; i < this.size; i++) {
-            let rowOP = "";
-            for (let j = 0; j < this.size; j++) {
-                if (!this.board[i][j].occupied && !this.board[i][j].hit) {
-                    rowOP += ".";
-                } else if (this.board[i][j].occupied && !this.board[i][j].hit) {
-                    rowOP += "x";
-                }
-            }
-            console.log(`${rowOP}\n`);
-        }
-    }
-
     allShipsSunk() {
-        for (let i = 0; i < this.size; i++) {
-            for (let j = 0; j < this.size; j++) {
-                //check each cell if it has ship or not.
-                //if it has ship, check if that ship is sunk or not.
-                //if it has ship that's not sunk, return false.
-                const currShip = this.board[i][j].occupied;
-                if (currShip && !currShip.isSunk()) {
-                    return false;
-                }
+        for(let ship of this.ships){
+            if(!ship.isSunk()){
+                return false; 
             }
         }
         return true;
