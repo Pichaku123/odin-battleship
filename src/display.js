@@ -6,15 +6,19 @@ const UI = (gameController) => {
     const board2 = gameController.p2.gameboard;
     const boardContainer = document.querySelector("#board-container");
     const statusMsg = document.querySelector("#status-msg");
-    
+
     //random ship placement
     document.querySelector("#random-ship").addEventListener("click", () => {
+        randomPlacementMode();
+    });
+
+    const randomPlacementMode = () => {
         const lengths = [2, 3, 3, 4, 5];
         board1.randomlyPlaceShips(lengths);
         board2.randomlyPlaceShips(lengths);
         renderBothBoards();
         statusMsg.innerHTML = "Randomly placed boards.";
-    });
+    };
 
     const renderBothBoards = () => {
         boardContainer.innerHTML = ""; // to clear previous boards
@@ -43,7 +47,10 @@ const UI = (gameController) => {
                 const oppBoard = gameController.currPlayer === gameController.p1 ? board2 : board1;
                 //add event listener during cell creation in dom itself, tbd later
                 cell.addEventListener("click", () => clickHandler(currBoard, i, j, cell));
-                statusMsg.innerHTML = gameController.currPlayer === gameController.p1 ? `Player 1's turn` : `Player 2's turn`;
+                statusMsg.innerHTML =
+                    gameController.currPlayer === gameController.p1
+                        ? `Player 1's turn`
+                        : `Player 2's turn`;
             }
 
             boardDisplay.appendChild(row);
@@ -65,6 +72,22 @@ const UI = (gameController) => {
             //pass callback to turn() to update ui after every turn
             gameController.turn(i, j, (turnResult) => {
                 renderBothBoards();
+
+                const board1DOM = document.querySelector(".board-1");
+                const board2DOM = document.querySelector(".board-2");
+                board1DOM.classList.remove("active-board", "inactive-board");   //reset them
+                board2DOM.classList.remove("active-board", "inactive-board");
+
+                //apply opacity based on class
+                if (turnResult.currentPlayer === gameController.p1) {
+                    board1DOM.classList.add("active-board");
+                    board2DOM.classList.add("inactive-board");
+                } else {
+                    board2DOM.classList.add("active-board");
+                    board1DOM.classList.add("inactive-board");
+                }
+                
+                //checking status of result
                 if (turnResult.status === "alr_atk") {
                     statusMsg.innerHTML = "Invalid, retry";
                     console.log(statusMsg.innerHTML);
@@ -97,9 +120,8 @@ const UI = (gameController) => {
             cellDOM.classList.toggle("nothing");
         }
     };
-
-    renderBoard(board1);
-    renderBoard(board2);
+    randomPlacementMode(); //temporarily render random ships, will make mode to place them manually later.
+    console.log("random");
 };
 
 module.exports = UI;

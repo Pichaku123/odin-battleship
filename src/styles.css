@@ -33,9 +33,9 @@ body {
     background-color: aquamarine;
 }
 
-/* .not-yet {
+.not-yet {
     background-color: greenyellow;
-} */
+}
 
 #status-msg {
     border: 2px solid black;
@@ -47,3 +47,12 @@ body {
     font-size: 1.2em;
     padding: 0.5em 1em;
 }
+
+.active-board {
+    opacity: 1;
+}
+  
+.inactive-board {
+    opacity: 0.3; 
+}
+  
