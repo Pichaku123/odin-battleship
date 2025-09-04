@@ -34,7 +34,8 @@ class GameController {
             `Move played by ${this.currPlayer === this.p1 ? "p1" : "p2"} at ${row}, ${col}`
         );
 
-        let result = {  //for default case, update fields as needed
+        let result = {
+            //for default case, update fields as needed
             row,
             col,
             status,
@@ -44,8 +45,33 @@ class GameController {
         };
 
         if (status === "alr_atk") {
-            if(callback) callback(result);
+            if (callback) callback(result);
             return result;
+        }
+
+        // smarter ai logic, adds valid neighbours to a list which is checked on next move
+        // more details in player
+        if (status == "hit" && this.currPlayer.type === "comp") {
+            const dirs = [
+                [1, 0],
+                [-1, 0],
+                [0, 1],
+                [0, -1],
+            ];
+            for (const [dr, dc] of dirs) {
+                const nr = row + dr;
+                const nc = col + dc;
+                //checking if valid position and if already hit, if anything occurs, ignore and move on to next
+                if (
+                    nr >= 0 &&
+                    nc >= 0 &&
+                    nr < oppPlayer.gameboard.size &&
+                    nc < oppPlayer.gameboard.size &&
+                    !oppPlayer.gameboard.board[nr][nc].hit
+                ) {
+                    this.currPlayer.checkNext.push([nr, nc]);
+                }
+            }
         }
 
         //check win condition
@@ -57,17 +83,18 @@ class GameController {
         } else {
             //swap current player only if they've played valid move
             this.currPlayer = this.currPlayer === this.p1 ? this.p2 : this.p1;
-            //update- play computer's move immediately if its computer's turn next, else move on normally.
-
-            if (this.currPlayer.type === "comp") {
-                setTimeout(() => this.turn(null, null, callback), 800); // fake illusion of ai "thinking", recursively play next turn
-            }
         }
-        if (callback) callback(result); //basically the callback is used to update ui
-        //the definition of callback is in display.js
-        //basically sending result back to display.js to update the UI
+
+        if (callback) callback(result); // basically the callback is used to update ui
+        // basically sending result back to display.js to update the UI
+
+        // play computer's move immediately if its computer's turn next, else move on normally.
+        if (!result.gameOver && this.currPlayer.type === "comp") {
+            setTimeout(() => this.turn(null, null, callback), 900); // fake illusion of ai "thinking"
+        }
         return result;
     }
+
 }
 
 module.exports = GameController;

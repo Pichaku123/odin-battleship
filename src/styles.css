@@ -33,7 +33,8 @@ body {
     background-color: aquamarine;
 }
 
-.not-yet {
+/* comment this out whenever we want to hide the ship positions */
+.not-yet {      
     background-color: greenyellow;
 }
 

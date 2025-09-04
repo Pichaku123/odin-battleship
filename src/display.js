@@ -70,42 +70,44 @@ const UI = (gameController) => {
             }
 
             //pass callback to turn() to update ui after every turn
-            gameController.turn(i, j, (turnResult) => {
-                renderBothBoards();
-
-                const board1DOM = document.querySelector(".board-1");
-                const board2DOM = document.querySelector(".board-2");
-                board1DOM.classList.remove("active-board", "inactive-board");   //reset them
-                board2DOM.classList.remove("active-board", "inactive-board");
-
-                //apply opacity based on class
-                if (turnResult.currentPlayer === gameController.p1) {
-                    board1DOM.classList.add("active-board");
-                    board2DOM.classList.add("inactive-board");
-                } else {
-                    board2DOM.classList.add("active-board");
-                    board1DOM.classList.add("inactive-board");
-                }
-                
-                //checking status of result
-                if (turnResult.status === "alr_atk") {
-                    statusMsg.innerHTML = "Invalid, retry";
-                    console.log(statusMsg.innerHTML);
-                    return;
-                }
-
-                if (turnResult.gameOver) {
-                    if (turnResult.winner === gameController.p1) {
-                        statusMsg.innerHTML = "Player 1 wins!";
-                        console.log(statusMsg.innerHTML);
-                    } else {
-                        statusMsg.innerHTML = "Player 2 wins!";
-                        console.log(statusMsg.innerHTML);
-                    }
-                }
-            }); //callback to update the board after every turn
+            gameController.turn(i, j, handleTurnResult); //callback to update the board after every turn
         }
     };
+
+    const handleTurnResult = (turnResult) => {
+        renderBothBoards();
+
+        const board1DOM = document.querySelector(".board-1");
+        const board2DOM = document.querySelector(".board-2");
+        board1DOM.classList.remove("active-board", "inactive-board"); //reset them
+        board2DOM.classList.remove("active-board", "inactive-board");
+
+        //apply opacity based on class
+        if (turnResult.currentPlayer === gameController.p1) {
+            board1DOM.classList.add("active-board");
+            board2DOM.classList.add("inactive-board");
+        } else {
+            board2DOM.classList.add("active-board");
+            board1DOM.classList.add("inactive-board");
+        }
+
+        //checking status of result
+        if (turnResult.status === "alr_atk") {
+            statusMsg.innerHTML = "Invalid, retry";
+            console.log(statusMsg.innerHTML);
+            return;
+        }
+
+        if (turnResult.gameOver) {
+            if (turnResult.winner === gameController.p1) {
+                statusMsg.innerHTML = "Player 1 wins!";
+                console.log(statusMsg.innerHTML);
+            } else {
+                statusMsg.innerHTML = "Player 2 wins!";
+                console.log(statusMsg.innerHTML);
+            }
+        }
+    }
 
     const markCondition = (currCell, cellDOM) => {
         //remove the other classes first, cuz that was causing issues with updating css

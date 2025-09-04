@@ -1,9 +1,6 @@
 import "./styles.css";
 
 const Player = require("./player");
-const Gameboard = require("./gameboard");
-const Ship = require("./ship");
-const Cell = require("./cell");
 const GameController = require("./gamecontroller");
 const UI = require("./display");
 
