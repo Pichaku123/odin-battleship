@@ -141,11 +141,23 @@ const UI = (gameController) => {
                         e.preventDefault();
                         const len = parseInt(e.dataTransfer.getData("length"));
                         const ori = e.dataTransfer.getData("orientation");
+
+                        const alreadyPlaced = currBoard.ships.some((ship) => ship.length === len);
+                        if (alreadyPlaced) return; 
+                        
                         const status = currBoard.placeShip(i, j, ori, len);
-                        if (status){
+                        if (status) {
+                            const shipDOM = Array.from(ships).find(
+                                (s) => parseInt(s.dataset.length) === len && s.draggable
+                            );
+                            if(shipDOM) {
+                                shipDOM.draggable = false;
+                                shipDOM.classList.add("placed");
+                            }
+                            //make it not draggable, will darken this using css ig.
                             renderBothBoards();
                             updateStart();
-                        }        
+                        }
                     });
                 }
 

@@ -68,3 +68,7 @@ body {
     font-size: 1.2rem;
     width: 5rem;
 }
+
+.ship.placed{
+    opacity: 0.5;
+}
