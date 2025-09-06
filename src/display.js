@@ -6,6 +6,25 @@ const UI = (gameController) => {
     const board2 = gameController.p2.gameboard;
     const boardContainer = document.querySelector("#board-container");
     const statusMsg = document.querySelector("#status-msg");
+    const ships = document.querySelectorAll(".ship");
+
+    ships.forEach((ship) => {
+        ship.addEventListener("dragstart", (e) => {
+            e.dataTransfer.setData("length", ship.dataset.length);
+            e.dataTransfer.setData("orientation", "hori");
+        });
+    });
+
+    const shipPlacement = () => {
+        if (gameController.p1.type === "comp") {
+            board1.randomlyPlaceShips([2, 3, 3, 4, 5]);
+        }
+        if(gameController.p2.type === "comp"){
+            board2.randomlyPlaceShips([2, 3, 3, 4, 5]);
+        }
+        renderBothBoards();
+        statusMsg.innerHTML = "Place your ships!";
+    }
 
     //random ship placement
     document.querySelector("#random-ship").addEventListener("click", () => {
@@ -13,12 +32,29 @@ const UI = (gameController) => {
     });
 
     const randomPlacementMode = () => {
-        const lengths = [2, 3, 3, 4, 5];
-        board1.randomlyPlaceShips(lengths);
-        board2.randomlyPlaceShips(lengths);
+        // reset boards before placing more, else it places them along with these
+        board1.ships = [];
+        for (let i = 0; i < board1.size; i++) {
+            for (let j = 0; j < board1.size; j++) {
+                board1.board[i][j].occupied = false;
+                board1.board[i][j].hit = false;
+            }
+        }
+        board2.ships = [];
+        for (let i = 0; i < board2.size; i++) {
+            for (let j = 0; j < board2.size; j++) {
+                board2.board[i][j].occupied = false;
+                board2.board[i][j].hit = false;
+            }
+        }
+
+        board1.randomlyPlaceShips([2, 3, 3, 4, 5]);
+        board2.randomlyPlaceShips([2, 3, 3, 4, 5]);
+
         renderBothBoards();
         statusMsg.innerHTML = "Randomly placed boards.";
     };
+    
 
     const renderBothBoards = () => {
         boardContainer.innerHTML = ""; // to clear previous boards
@@ -44,9 +80,31 @@ const UI = (gameController) => {
                 row.appendChild(cell);
                 markCondition(currBoard.board[i][j], cell);
 
-                const oppBoard = gameController.currPlayer === gameController.p1 ? board2 : board1;
                 //add event listener during cell creation in dom itself, tbd later
-                cell.addEventListener("click", () => clickHandler(currBoard, i, j, cell));
+                //logic for clicks on board
+                const oppBoard = gameController.currPlayer === gameController.p1 ? board2 : board1;
+                if(currBoard === oppBoard){
+                    cell.addEventListener("click", () => clickHandler(currBoard, i, j, cell));
+                }
+
+                //drag and drop for ship placing
+                if (
+                    (currBoard === board1 && gameController.p1.type === "human") ||
+                    (currBoard === board2 && gameController.p2.type === "human")
+                ) {
+                    cell.addEventListener("dragover", (e) => {
+                        e.preventDefault();
+                    });
+
+                    cell.addEventListener("drop", (e) => {
+                        e.preventDefault();
+                        const len = parseInt(e.dataTransfer.getData("length"));
+                        const ori = e.dataTransfer.getData("orientation");
+                        const status = currBoard.placeShip(i, j, ori, len);
+                        if (status) renderBothBoards();
+                    });
+                }
+
                 statusMsg.innerHTML =
                     gameController.currPlayer === gameController.p1
                         ? `Player 1's turn`
@@ -70,7 +128,7 @@ const UI = (gameController) => {
             }
 
             //pass callback to turn() to update ui after every turn
-            gameController.turn(i, j, handleTurnResult); //callback to update the board after every turn
+            gameController.turn(i, j, handleTurnResult);
         }
     };
 
@@ -122,7 +180,8 @@ const UI = (gameController) => {
             cellDOM.classList.toggle("nothing");
         }
     };
-    randomPlacementMode(); //temporarily render random ships, will make mode to place them manually later.
+
+    shipPlacement();
     console.log("random");
 };
 
