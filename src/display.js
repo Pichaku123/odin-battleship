@@ -7,6 +7,8 @@ const UI = (gameController) => {
     const boardContainer = document.querySelector("#board-container");
     const statusMsg = document.querySelector("#status-msg");
     const ships = document.querySelectorAll(".ship");
+    const startBtn = document.querySelector("#start-game");
+    let gameStartedYet = false;
 
     ships.forEach((ship) => {
         ship.addEventListener("dragstart", (e) => {
@@ -23,6 +25,7 @@ const UI = (gameController) => {
             board2.randomlyPlaceShips([2, 3, 3, 4, 5]);
         }
         renderBothBoards();
+        updateStart();
         statusMsg.innerHTML = "Place your ships!";
     }
 
@@ -52,9 +55,47 @@ const UI = (gameController) => {
         board2.randomlyPlaceShips([2, 3, 3, 4, 5]);
 
         renderBothBoards();
+        updateStart();
         statusMsg.innerHTML = "Randomly placed boards.";
     };
     
+    const allShipsPlaced = () => {
+        const p1Done = board1.ships.length === 5;
+        const p2Done = board2.ships.length === 5;
+        if (gameController.p1.type === "human" && gameController.p2.type === "human") {
+            return p1Done && p2Done;
+        }
+        if (gameController.p1.type === "human" && gameController.p2.type === "comp") {
+            return p1Done;
+        }
+        if (gameController.p1.type === "comp" && gameController.p2.type === "human") {
+            return p2Done;
+        }
+        return true;
+    }
+
+    const updateStart = () => {
+        if(startBtn){
+            startBtn.disabled = !allShipsPlaced();  // disable if all ships are not placed
+            if (startBtn.disabled) {
+                statusMsg.innerHTML = "Place all ships before starting.";
+            } else {
+                statusMsg.innerHTML = "Ready to start!";
+            }
+        }
+    }
+
+    if (startBtn) {
+        startBtn.addEventListener("click", () => {
+            if (allShipsPlaced()) {
+                statusMsg.innerHTML = "Game started!";
+                startBtn.disabled = true;
+                gameStartedYet = true;
+            } else {
+                statusMsg.innerHTML = "Place all ships first!";
+            }
+        });
+    }
 
     const renderBothBoards = () => {
         boardContainer.innerHTML = ""; // to clear previous boards
@@ -101,7 +142,10 @@ const UI = (gameController) => {
                         const len = parseInt(e.dataTransfer.getData("length"));
                         const ori = e.dataTransfer.getData("orientation");
                         const status = currBoard.placeShip(i, j, ori, len);
-                        if (status) renderBothBoards();
+                        if (status){
+                            renderBothBoards();
+                            updateStart();
+                        }        
                     });
                 }
 
@@ -116,6 +160,10 @@ const UI = (gameController) => {
     };
 
     const clickHandler = (currBoard, i, j, cell) => {
+        if(!gameStartedYet){
+            statusMsg.innerHTML = "Game not started.";
+            return;
+        }
         //use the turn's result to get turn details like coords, status and stuff
         if (!gameController.winner) {
             //adding checks to ensure we only click on enemy's board, not our own
@@ -182,7 +230,7 @@ const UI = (gameController) => {
     };
 
     shipPlacement();
-    console.log("random");
+    updateStart();
 };
 
 module.exports = UI;
