@@ -4,10 +4,14 @@ body {
     margin: 0;
     box-sizing: border-box;
     min-height: 100vh;
-    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    font-family: "Open Sans", sans-serif;
     display: flex;
     color: #333;
     flex-direction: column;
+}
+
+header > h1, #status-msg, .mode-btn{
+    font-family: "Orbitron", sans-serif;
 }
 
 header, footer {

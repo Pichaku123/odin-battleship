@@ -14,7 +14,7 @@ const UI = (gameController) => {
     const nextBtn = document.querySelector("#next-player-btn");
 
     let gameStartedYet = false;
-    let playerSetup = 1;    //tracks which player is setting up ships, mainly for pvp.
+    let playerSetup = 1; //tracks which player is setting up ships, mainly for pvp.
 
     ships.forEach((ship) => {
         ship.addEventListener("dragstart", (e) => {
@@ -28,21 +28,20 @@ const UI = (gameController) => {
         if (gameController.p1.type === "comp") {
             board1.randomlyPlaceShips([2, 3, 3, 4, 5]);
         }
-        if(gameController.p2.type === "comp"){
+        if (gameController.p2.type === "comp") {
             board2.randomlyPlaceShips([2, 3, 3, 4, 5]);
         }
+
         renderBothBoards();
         updateStart();
-        if (gameController.p1.type === "human" && gameController.p2.type === "human"){
+        
+        if (gameController.p1.type === "human" && gameController.p2.type === "human") {
             statusMsg.innerHTML =
-                playerSetup === 1 ? 
-                "Player 1: Place your ships!" : 
-                "Player 2: Place your ships!";
-        }
-        else{
+                playerSetup === 1 ? "Player 1: Place your ships!" : "Player 2: Place your ships!";
+        } else {
             statusMsg.innerHTML = "Place your ships!";
         }
-    }
+    };
 
     //random ship placement
     document.querySelector("#random-ship").addEventListener("click", () => {
@@ -70,11 +69,10 @@ const UI = (gameController) => {
         board2.randomlyPlaceShips([2, 3, 3, 4, 5]);
 
         renderBothBoards();
-        gameStartedYet = true;  // to start game imme. after random placement.
         updateStart();
-        statusMsg.innerHTML = "Randomly placed boards, game started!";
+        statusMsg.innerHTML = "Randomly placed boards, you can start the game now!";
     };
-    
+
     const allShipsPlaced = () => {
         const p1Done = board1.ships.length === 5;
         const p2Done = board2.ships.length === 5;
@@ -88,26 +86,27 @@ const UI = (gameController) => {
             return p2Done;
         }
         return true;
-    }
+    };
 
     nextBtn.addEventListener("click", () => {
-        playerSetup = 2;    // goes to player 2
+        playerSetup = 2; // goes to player 2
         //now reset ships for p2
         ships.forEach((ship) => {
             ship.draggable = true;
             ship.classList.remove("placed");
-        })
+        });
         shipPlacement();
         updateStart();
-    })
+    });
 
     const updateStart = () => {
-        if(startBtn){
+        if (startBtn) {
             if (
                 gameController.p1.type === "human" &&
                 gameController.p2.type === "human" &&
                 !gameStartedYet
-            ){      //for pvp
+            ) {
+                //for pvp
                 // updatestart called after every ship's placed, so only check for all ships placed.
                 if (playerSetup === 1 && board1.ships.length === 5) {
                     startBtn.disabled = true;
@@ -122,8 +121,8 @@ const UI = (gameController) => {
                     startBtn.disabled = true;
                     nextBtn.style.display = "none";
                 }
-            }
-            else{   //for pvc
+            } else {
+                //for pvc
                 startBtn.disabled = !allShipsPlaced(); // disable if all ships are not placed
                 if (startBtn.disabled) {
                     statusMsg.innerHTML = "Place all ships before starting.";
@@ -132,7 +131,7 @@ const UI = (gameController) => {
                 }
             }
         }
-    }
+    };
 
     if (startBtn) {
         startBtn.addEventListener("click", () => {
@@ -140,6 +139,7 @@ const UI = (gameController) => {
                 statusMsg.innerHTML = "Game started!";
                 startBtn.disabled = true;
                 gameStartedYet = true;
+                renderBothBoards();
             } else {
                 statusMsg.innerHTML = "Place all ships first!";
             }
@@ -162,13 +162,14 @@ const UI = (gameController) => {
 
         // only render 1 board at a time in pvp, that being for player placing ships.
         if (
-            gameController.p1.type === "human" &&
-            gameController.p2.type === "human" &&
             !gameStartedYet &&
-            ((playerSetup === 1 && currBoard === board1) ||
-                (playerSetup === 2 && currBoard === board2))
+            ((gameController.p1.type === "human" && currBoard === board1) ||
+                (gameController.p1.type === "human" &&
+                    gameController.p2.type === "human" &&
+                    playerSetup === 2 &&
+                    currBoard === board2))
         ) {
-            boardDisplay.classList.add("active-setup-board");   // only make this one visible in css.
+            boardDisplay.classList.add("active-setup-board");
         }
 
         for (let i = 0; i < currBoard.size; i++) {
@@ -181,19 +182,28 @@ const UI = (gameController) => {
                 row.appendChild(cell);
                 markCondition(currBoard.board[i][j], cell);
 
-                //add event listener during cell creation in dom itself, tbd later
                 //logic for clicks on board
-                const oppBoard = gameController.currPlayer === gameController.p1 ? board2 : board1;
-                cell.addEventListener("click", () => clickHandler(currBoard, i, j, cell));
+                if(gameStartedYet){
+                    const oppBoard =
+                        gameController.currPlayer === gameController.p1 ? board2 : board1;
+                    if(currBoard === oppBoard){
+                        cell.addEventListener("click", () => clickHandler(currBoard, i, j, cell));
+                    }
+                }
 
                 //drag and drop for ship placing
                 //updated condition to include current player who is setting up board.
                 if (
-                    gameController.p1.type === "human" &&
-                    gameController.p2.type === "human" &&
                     !gameStartedYet &&
-                    ((playerSetup === 1 && currBoard === board1) ||
-                        (playerSetup === 2 && currBoard === board2))
+                    // pvc
+                    ((gameController.p1.type === "human" &&
+                        gameController.p2.type === "comp" &&
+                        currBoard === board1) ||
+                        // pvp
+                        (gameController.p1.type === "human" &&
+                            gameController.p2.type === "human" &&
+                            ((playerSetup === 1 && currBoard === board1) ||
+                                (playerSetup === 2 && currBoard === board2))))
                 ) {
                     cell.addEventListener("dragover", (e) => {
                         e.preventDefault();
@@ -229,7 +239,7 @@ const UI = (gameController) => {
     };
 
     const clickHandler = (currBoard, i, j, cell) => {
-        if(!gameStartedYet){
+        if (!gameStartedYet) {
             statusMsg.innerHTML = "Game not started.";
             return;
         }
@@ -282,7 +292,7 @@ const UI = (gameController) => {
                 console.log(statusMsg.innerHTML);
             }
         }
-    }
+    };
 
     const markCondition = (currCell, cellDOM) => {
         //remove the other classes first, cuz that was causing issues with updating css
@@ -300,20 +310,19 @@ const UI = (gameController) => {
 
     const chooseMode = (selectedGameMode) => {
         //gamemode selection done thru modal before everything else is loaded.
-        if(selectedGameMode === "pvp"){
+        if (selectedGameMode === "pvp") {
             gameController.p1.type = "human";
             gameController.p2.type = "human";
-        }   
-        else{
+        } else {
             gameController.p1.type = "human";
             gameController.p2.type = "comp";
         }
-        gameMode.style.display = "none"    //hide modal after choosing
-        shipPlacement();    //moved to choosemode so that it only happens after choosing gamemode
+        gameMode.style.display = "none"; //hide modal after choosing
+        shipPlacement(); //moved to choosemode so that it only happens after choosing gamemode
         updateStart();
-    }
-    
-    const setupModeBtns = (() => {   
+    };
+
+    const setupModeBtns = (() => {
         //for the modal buttons
         pvpBtn.addEventListener("click", () => chooseMode("pvp"));
         pvcBtn.addEventListener("click", () => chooseMode("pvc"));
