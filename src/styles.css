@@ -1,86 +1,189 @@
 body {
-    background-color: azure;
+    background-color: #fdfdfd;
     padding: 0;
     margin: 0;
     box-sizing: border-box;
+    min-height: 100vh;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    color: #333;
+    flex-direction: column;
+}
+
+header, footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #a3c4f3; 
+    padding: 0.8rem;
+    border: none;
+}
+
+header > h1 {
+    margin: 0;
+    font-size: 2rem;
+}
+
+footer > p {
+    margin: 0;
+    font-size: 1rem;
+}
+
+.main-content {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 1rem;
+}
+
+#status-msg {
+    border: 2px solid #cdb4db;
+    height: 2.5em;
+    font-size: 1.2em;
+    padding: 0.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50%;
+    background: #fef6ff;
+    border-radius: 1rem;
 }
 
 #board-container {
-    border: 2px solid black;
-    margin: 100px;
+    width: 50%;
     display: flex;
-    justify-content: space-between;
+    gap: 8rem; 
+    justify-content: center;
+    margin: 1rem 0;
+}
+
+.board-1, .board-2 {
+    border: 2px solid green; 
+    padding: 1rem;
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.15);
 }
 
 .board-row {
-    border: 2px solid black;
-    height: 30px;
-    width: 300px;
     display: flex;
 }
 
 .board-cell {
-    border: 2px solid black;
-    width: 30px;
-    height: 30px;
+    border: 0.5px solid #333;
+    width: 28px;
+    height: 28px;
+}
+
+.board-cell:hover {
+    background-color: #ffe5ec;
+    cursor: pointer;
 }
 
 .hit {
-    background-color: red;
+    background-color: #ff5e5e; 
 }
 
 .miss {
-    background-color: aquamarine;
+    background-color: #a0e7e5; 
 }
 
-/* comment this out whenever we want to hide the ship positions */
-.not-yet {      
-    background-color: greenyellow;
+.not-yet {
+    background-color: #a0ff8e; 
 }
 
-#status-msg {
-    border: 2px solid black;
-    height: 2em;
-    font-size: 2em;
+#random-ship, #start-game, #next-player-btn {
+    font-size: 1rem;
+    padding: 0.5rem 1.2rem;
+    border-radius: 6px;
+    border: 2px solid #cdb4db;
+    background: #fffbf2;
+    cursor: pointer;
 }
 
-#random-ship{
-    font-size: 1.2em;
-    padding: 0.5em 1em;
+#random-ship:hover, #start-game:hover, #next-player-btn:hover {
+    background: #fde2e4;
 }
 
-.active-board {
-    opacity: 1;
-}
-  
-.inactive-board {
-    opacity: 0.3; 
-}
-
-#ships-container{
+#ships-container {
     display: flex;
-    justify-content: space-evenly;
-}
-  
-.ship{
-    border: 2px solid green;
-    background-color: darkcyan;
-    font-size: 1.2rem;
-    width: 5rem;
+    justify-content: center;
+    gap: 0.5rem; 
+    border: none;
+    width: 70%;
+    margin-top: 0.5rem; 
 }
 
-.ship.placed{
+.ship {
+    border: 2px solid #b5ead7;
+    background-color: #a3c4f3;
+    color: #333;
+    font-size: 1rem;
+    padding: 0.4rem;
+    min-width: 4.5rem;
+    text-align: center;
+    border-radius: 5px;
+    cursor: grab;
+}
+
+.ship:hover {
+    background-color: #cdb4db;
+}
+
+.ship.placed {
     opacity: 0.5;
 }
 
-#game-mode{
-    border: 2px solid black;
+#game-mode {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    background-color: rgba(0,0,0,0.4); /* softer overlay */
 }
 
-.active-setup-board {
-    border: 5px solid blue;
+.modal-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    padding: 2rem 2.5rem;
+    border: 2px solid #cdb4db;
+    background: #fff0f6;
+    border-radius: 12px;
+    min-width: 280px;
+    align-items: center;
+    text-align: center;
+    box-shadow: 0 5px 10px rgba(0,0,0,0.2);
 }
 
-.modal[hidden]{
-    display: none;
+.modal-content > h2 {
+    font-size: 1.8rem;
+    margin: 0;
+    color: #333;
+}
+
+.mode-btn-container {
+    display: flex;
+    gap: 0.8rem;
+    justify-content: center;
+}
+
+.mode-btn {
+    padding: 0.7rem 1.5rem;
+    font-size: 1rem;
+    border: 2px solid #b5ead7;
+    border-radius: 6px;
+    background: #e2f0f9;
+    cursor: pointer;
+}
+
+.mode-btn:hover {
+    background: #cde8f6;
 }

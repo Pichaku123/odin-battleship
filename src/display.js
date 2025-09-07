@@ -184,9 +184,7 @@ const UI = (gameController) => {
                 //add event listener during cell creation in dom itself, tbd later
                 //logic for clicks on board
                 const oppBoard = gameController.currPlayer === gameController.p1 ? board2 : board1;
-                if (currBoard === oppBoard) {
-                    cell.addEventListener("click", () => clickHandler(currBoard, i, j, cell));
-                }
+                cell.addEventListener("click", () => clickHandler(currBoard, i, j, cell));
 
                 //drag and drop for ship placing
                 //updated condition to include current player who is setting up board.
@@ -310,7 +308,7 @@ const UI = (gameController) => {
             gameController.p1.type = "human";
             gameController.p2.type = "comp";
         }
-        gameMode.setAttribute("hidden", "true");    //hide modal after choosing
+        gameMode.style.display = "none"    //hide modal after choosing
         shipPlacement();    //moved to choosemode so that it only happens after choosing gamemode
         updateStart();
     }

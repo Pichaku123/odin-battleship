@@ -4,9 +4,11 @@ class Player {
     constructor(type = "human") {
         this.type = type;
         this.gameboard = new Gameboard(10);
-        if(this.type == "comp"){
-            this.checkNext = [];    // basically stores cells that surround current hit one, if its empty, just pick randomly.
-        }
+        this.checkNext = [];    
+        // basically stores cells that surround current hit one, if its empty, just pick randomly.
+        // initialised for human too, but it stays unused, we play around with the property
+        // so if we do type === comp, we might not even have a checknext. 
+        
     }
 
     makeMove(oppBoard) {
