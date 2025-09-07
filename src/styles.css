@@ -72,3 +72,15 @@ body {
 .ship.placed{
     opacity: 0.5;
 }
+
+#game-mode{
+    border: 2px solid black;
+}
+
+.active-setup-board {
+    border: 5px solid blue;
+}
+
+.modal[hidden]{
+    display: none;
+}

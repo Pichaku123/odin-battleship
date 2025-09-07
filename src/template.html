@@ -8,15 +8,23 @@
     </head>
     <body>
         <div id="status-msg"></div>
+        <div id="game-mode" class="modal">
+            <div class="modal-content">
+              <h2>Choose Game Type</h2>
+              <button id="pvp-btn">Player vs Player</button>
+              <button id="pvc-btn">Player vs Computer</button>
+            </div>
+          </div>
         <div id="board-container"></div>
         <button id="random-ship">Place Ships Randomly</button>
         <button id="start-game">Start Game</button>
+        <button id="next-player-btn" style="display:none">Swap to next player</button>
         <div id="ships-container">
-            <div class="ship" draggable="true" data-length="2">Ship (2)</div>
-            <div class="ship" draggable="true" data-length="3">Ship (3)</div>
-            <div class="ship" draggable="true" data-length="3">Ship (3)</div>
-            <div class="ship" draggable="true" data-length="4">Ship (4)</div>
-            <div class="ship" draggable="true" data-length="5">Ship (5)</div>
+            <div class="ship" draggable="true" data-length="2" data-index="0">Ship (2)</div>
+            <div class="ship" draggable="true" data-length="3" data-index="1">Ship (3)</div>
+            <div class="ship" draggable="true" data-length="3" data-index="2">Ship (3)</div>
+            <div class="ship" draggable="true" data-length="4" data-index="3">Ship (4)</div>
+            <div class="ship" draggable="true" data-length="5" data-index="4">Ship (5)</div>
           </div>
           
     </body>
