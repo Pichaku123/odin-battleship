@@ -4,23 +4,34 @@ body {
     margin: 0;
     box-sizing: border-box;
     min-height: 100vh;
-    font-family: "Open Sans", sans-serif;
+    font-family: "Orbitron", sans-serif;
     display: flex;
     color: #333;
     flex-direction: column;
 }
 
-header > h1, #status-msg, .mode-btn{
-    font-family: "Orbitron", sans-serif;
+header > h1, footer > p{
+    font-family: "Open Sans", sans-serif;
 }
 
-header, footer {
+header{
     display: flex;
     justify-content: center;
     align-items: center;
     background: #a3c4f3; 
     padding: 0.8rem;
     border: none;
+    height: 5rem;
+}
+
+footer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #a3c4f3; 
+    padding: 0.8rem;
+    border: none;
+    height: 2rem;
 }
 
 header > h1 {
@@ -30,7 +41,7 @@ header > h1 {
 
 footer > p {
     margin: 0;
-    font-size: 1rem;
+    font-size: 1.2rem;
 }
 
 .main-content {
@@ -125,14 +136,26 @@ footer > p {
     background-color: #a3c4f3;
     color: #333;
     font-size: 1rem;
-    padding: 0.4rem;
+    padding: 0.8rem 1rem;
     min-width: 4.5rem;
     text-align: center;
     border-radius: 5px;
     cursor: grab;
 }
 
-.ship:hover {
+#rotate-btn {
+    border: 2px solid #b5ead7;
+    background-color: #a3c4f3;
+    color: #333;
+    font-size: 1.2rem;
+    font-weight: bold;
+    padding: 0.8rem 1.5rem;
+    min-width: 4.5rem;
+    text-align: center;
+    border-radius: 5px;
+}
+
+.ship:hover, #rotate-btn:hover {
     background-color: #cdb4db;
 }
 

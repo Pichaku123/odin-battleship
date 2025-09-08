@@ -12,14 +12,16 @@ const UI = (gameController) => {
     const pvpBtn = document.querySelector("#pvp-btn");
     const pvcBtn = document.querySelector("#pvc-btn");
     const nextBtn = document.querySelector("#next-player-btn");
+    const rotateBtn = document.querySelector("#rotate-btn");
 
     let gameStartedYet = false;
     let playerSetup = 1; //tracks which player is setting up ships, mainly for pvp.
+    let currentOrientation = "hori";
 
     ships.forEach((ship) => {
         ship.addEventListener("dragstart", (e) => {
             e.dataTransfer.setData("length", ship.dataset.length);
-            e.dataTransfer.setData("orientation", "hori");
+            e.dataTransfer.setData("orientation", currentOrientation);
             e.dataTransfer.setData("index", ship.dataset.index);
         });
     });
@@ -145,6 +147,11 @@ const UI = (gameController) => {
             }
         });
     }
+
+    rotateBtn.addEventListener("click", () => {
+        currentOrientation = currentOrientation === "hori" ? "vert" : "hori";
+        rotateBtn.textContent = `Rotate Ships (Current- ${currentOrientation === "hori" ? "Horizontal" : "Vertical"})`;
+    });
 
     const renderBothBoards = () => {
         boardContainer.innerHTML = ""; // to clear previous boards
